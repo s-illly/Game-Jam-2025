@@ -1,8 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://c5ev5ithmxmf3"]
+[gd_scene load_steps=6 format=3 uid="uid://c5ev5ithmxmf3"]
 
 [ext_resource type="PackedScene" uid="uid://b8wg6ln207opt" path="res://Player.tscn" id="1_a202f"]
 
+[sub_resource type="Sky" id="Sky_a202f"]
+
 [sub_resource type="Environment" id="Environment_4xowi"]
+background_mode = 2
+background_energy_multiplier = 1.43
+sky = SubResource("Sky_a202f")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4xowi"]
 
@@ -18,7 +23,7 @@ environment = SubResource("Environment_4xowi")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.041894, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)
+transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0.07444382, 0, 0.05256653)
 mesh = SubResource("PlaneMesh_4xowi")
 skeleton = NodePath("StaticBody3D")
 
@@ -26,7 +31,7 @@ skeleton = NodePath("StaticBody3D")
 transform = Transform3D(0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
-transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0.0029296875, -24.888645, 0.0063476563)
+transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0.0029296875, -23.510036, 0.0063476563)
 shape = SubResource("BoxShape3D_a202f")
 
 [node name="Player" parent="." instance=ExtResource("1_a202f")]
