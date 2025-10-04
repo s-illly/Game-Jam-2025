@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://qb3pp82856qb"
+path="res://.godot/imported/ES_Scream, Lo-FI, Vintage - Epidemic Sound.mp3-d6ecb6f37772d949bd4cd79a77fedfcb.mp3str"
+
+[deps]
+
+source_file="res://audio/ES_Scream, Lo-FI, Vintage - Epidemic Sound.mp3"
+dest_files=["res://.godot/imported/ES_Scream, Lo-FI, Vintage - Epidemic Sound.mp3-d6ecb6f37772d949bd4cd79a77fedfcb.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

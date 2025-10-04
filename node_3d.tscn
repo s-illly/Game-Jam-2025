@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://c5ev5ithmxmf3"]
+[gd_scene load_steps=8 format=3 uid="uid://c5ev5ithmxmf3"]
 
 [ext_resource type="PackedScene" uid="uid://drrtfvy8pxc4o" path="res://textures/hallway/source/hallway.glb" id="1_a0tk4"]
 [ext_resource type="PackedScene" uid="uid://b8wg6ln207opt" path="res://Player.tscn" id="1_a202f"]
+[ext_resource type="Script" uid="uid://d1bb17y6yixyf" path="res://game.gd" id="1_r3fl7"]
+[ext_resource type="AudioStream" uid="uid://qb3pp82856qb" path="res://audio/ES_Scream, Lo-FI, Vintage - Epidemic Sound.mp3" id="4_r3fl7"]
 
 [sub_resource type="Sky" id="Sky_a202f"]
 
@@ -9,7 +11,11 @@
 background_energy_multiplier = 1.43
 sky = SubResource("Sky_a202f")
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_noarx"]
+size = Vector3(1, 4.043335, 7.448242)
+
 [node name="Node3D" type="Node3D"]
+script = ExtResource("1_r3fl7")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_4xowi")
@@ -22,3 +28,14 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.0
 
 [node name="hallway" parent="." instance=ExtResource("1_a0tk4")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.5515528, 0, -16.115398)
+
+[node name="SoundZone" type="Area3D" parent="hallway"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="hallway/SoundZone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8218937, 1.3312378, -3.224121)
+shape = SubResource("BoxShape3D_noarx")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="hallway/SoundZone"]
+stream = ExtResource("4_r3fl7")
+
+[connection signal="body_entered" from="hallway/SoundZone" to="." method="_on_sound_zone_body_entered"]
