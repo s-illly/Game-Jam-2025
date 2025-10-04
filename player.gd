@@ -12,13 +12,15 @@ var client: StreamPeerTCP = null
 @export var turn_speed: float = 2.5  # optional, for keyboard turning
 
 # --- Hand-controlled look ---
-var target_yaw: float = 0.0
+var target_yaw: float = -15.7
 var target_pitch: float = 0.0
 var current_yaw: float = 0.0
 var current_pitch: float = 0.0
 @export var look_smooth: float = 0.1  # lerp factor for smoothing
 
 func _ready():
+	current_yaw = rotation.y  # use whatever rotation is set in the editor
+	current_pitch = cam.rotation.x
 	var result := listener.listen(65432)
 	if result != OK:
 		print("Failed to start server: ", result)
