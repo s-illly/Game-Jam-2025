@@ -3,20 +3,19 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://01awnpgjwb86"
-path="res://.godot/imported/silent+hill+2+-+2nd+Floor+Living+hall.glb-93fa091c611e1df0920f7a5a7aade260.scn"
+uid="uid://drrtfvy8pxc4o"
+path="res://.godot/imported/hallway.glb-792ff76ddb6d11767d3a3d47fa85a51b.scn"
 
 [deps]
 
-source_file="res://textures/hallway/source/silent+hill+2+-+2nd+Floor+Living+hall.glb"
-dest_files=["res://.godot/imported/silent+hill+2+-+2nd+Floor+Living+hall.glb-93fa091c611e1df0920f7a5a7aade260.scn"]
+source_file="res://textures/hallway/hallway.glb"
+dest_files=["res://.godot/imported/hallway.glb-792ff76ddb6d11767d3a3d47fa85a51b.scn"]
 
 [params]
 
 nodes/root_type=""
 nodes/root_name=""
-nodes/root_script=Object(GDScript,"resource_local_to_scene":false,"resource_name":"","script/source":"")
-
+nodes/root_script=null
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
 nodes/import_as_skeleton_bones=false

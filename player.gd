@@ -9,8 +9,6 @@ var client: StreamPeerTCP = null
 
 # --- Movement ---
 @export var walk_speed: float = 4.0
-@export var jump_speed: float = 8.0
-@export var gravity: float = 24.0
 @export var turn_speed: float = 2.5  # optional, for keyboard turning
 
 # --- Hand-controlled look ---

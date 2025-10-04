@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://i1ihg4sum7hl"]
 
-[ext_resource type="PackedScene" uid="uid://drrtfvy8pxc4o" path="res://textures/hallway/source/hallway.glb" id="1_45xto"]
+[ext_resource type="PackedScene" uid="uid://drrtfvy8pxc4o" path="res://textures/hallway/hallway.glb" id="1_45xto"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_45xto"]
 size = Vector3(11.04126, 7.9262085, 1)

@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://di24fclqbud6g"
-path.s3tc="res://.godot/imported/silent+hill+2+-+2nd+Floor+Living+hall_8.png-326b5ca6fe5d115296bb604887e32c1c.s3tc.ctex"
+uid="uid://cd7qdkc6xxm4r"
+path.s3tc="res://.godot/imported/hallway_Image_1.png-664073a969d7cffae6933047539a3295.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "d5d26121686129555bf98e74a3e026e1"
+"md5": "682ce6851ab22bf4332ea2466ece65e0"
 }
 
 [deps]
 
-source_file="res://textures/hallway/source/silent+hill+2+-+2nd+Floor+Living+hall_8.png"
-dest_files=["res://.godot/imported/silent+hill+2+-+2nd+Floor+Living+hall_8.png-326b5ca6fe5d115296bb604887e32c1c.s3tc.ctex"]
+source_file="res://textures/hallway/hallway_Image_1.png"
+dest_files=["res://.godot/imported/hallway_Image_1.png-664073a969d7cffae6933047539a3295.s3tc.ctex"]
 
 [params]
 

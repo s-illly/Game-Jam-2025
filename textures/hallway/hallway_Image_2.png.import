@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://062nu10f0u04"
-path.s3tc="res://.godot/imported/hallway_Image_4.png-a016eecbe5626fbd9e53cc0fdd6c70d5.s3tc.ctex"
+uid="uid://cb1tqhpnyk6i5"
+path.s3tc="res://.godot/imported/hallway_Image_2.png-8c3f0d26edcb0fc46ff103cba9147d36.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "30ebe0fe78ecc16c96ca11ba5bff297b"
+"md5": "28ffa785b4c97c35ac3dd11cbd92982c"
 }
 
 [deps]
 
-source_file="res://textures/hallway/source/hallway_Image_4.png"
-dest_files=["res://.godot/imported/hallway_Image_4.png-a016eecbe5626fbd9e53cc0fdd6c70d5.s3tc.ctex"]
+source_file="res://textures/hallway/hallway_Image_2.png"
+dest_files=["res://.godot/imported/hallway_Image_2.png-8c3f0d26edcb0fc46ff103cba9147d36.s3tc.ctex"]
 
 [params]
 
