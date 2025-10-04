@@ -1,21 +1,24 @@
-extends RigidBody3D
+extends CharacterBody3D
 
+# --- TCP for hand tracking ---
 var listener: TCPServer = TCPServer.new()
 var client: StreamPeerTCP = null
 
-var v : Vector3 = Vector3.ZERO
-var move_dir: Vector3 = Vector3.ZERO
-var target_speed := 0.0
-var acceleration := 20.0
-var friction := 10.0
-var max_speed := 6.0 
+# --- Camera ---
+@onready var cam: Camera3D = $Camera3D
 
-var jump_strength := 8.0
-var is_grounded := false
-var ground_check_distance := 1.1
+# --- Movement ---
+@export var walk_speed: float = 4.0
+@export var jump_speed: float = 8.0
+@export var gravity: float = 24.0
+@export var turn_speed: float = 2.5  # optional, for keyboard turning
 
-var turn_cooldown := 2.0
-var turn_timer := 0.0
+# --- Hand-controlled look ---
+var target_yaw: float = 0.0
+var target_pitch: float = 0.0
+var current_yaw: float = 0.0
+var current_pitch: float = 0.0
+@export var look_smooth: float = 0.1  # lerp factor for smoothing
 
 func _ready():
 	var result := listener.listen(65432)
@@ -25,103 +28,54 @@ func _ready():
 		print("Server is listening on port 65432")
 
 func _process(delta):
+	# Accept new client
 	if client == null and listener.is_connection_available():
 		client = listener.take_connection()
 		print("Python connected!")
 
+	# Receive hand tracking messages
 	if client != null and client.get_available_bytes() > 0:
 		var message := client.get_utf8_string(client.get_available_bytes()).strip_edges()
-		print("Received from Python:", message)	
-		handle_command(message)
-	
-	if turn_timer > 0.0:
-		turn_timer -= delta	
+		for line in message.split("\n", false):
+			if line == "":
+				continue
+			var parts = line.split(",")
+			if parts.size() == 2:
+				var nx = parts[0].to_float()  # -1..1 normalized X
+				var ny = parts[1].to_float()  # -1..1 normalized Y
+				set_target_look(nx, ny)
 
-func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
-	update_grounded_check()
+func set_target_look(nx: float, ny: float) -> void:
+	# Map X -1..1 to yaw range (-60° to 60°)
+	var yaw_range = deg_to_rad(60.0)
+	target_yaw = nx * yaw_range
 
-	# Current horizontal velocity (no vertical)
-	var horizontal_vel = v
-	horizontal_vel.y = 0.0
+	# Map Y -1..1 to pitch range (-40° to 40°)
+	var pitch_range = deg_to_rad(40.0)
+	target_pitch = clamp(-ny * pitch_range, deg_to_rad(-40), deg_to_rad(40))
 
-	# Desired velocity
-	var desired_velocity = move_dir.normalized() * target_speed
+func _physics_process(delta: float) -> void:
+	# --- Smoothly interpolate camera/player rotation ---
+	current_yaw = lerp_angle(current_yaw, target_yaw, look_smooth)
+	current_pitch = lerp_angle(current_pitch, target_pitch, look_smooth)
 
-	# Accelerate toward target
-	var accel = acceleration * state.step
-	horizontal_vel = horizontal_vel.lerp(desired_velocity, accel)
+	rotation.y = current_yaw
+	cam.rotation.x = current_pitch
 
-	# Apply friction when no input
-	if move_dir == Vector3.ZERO:
-		horizontal_vel = horizontal_vel.lerp(Vector3.ZERO, friction * state.step)
+	# --- Keyboard movement (W/S) ---
+	var direction = Vector3.ZERO
+	if Input.is_action_pressed("move_forward"):
+		direction -= transform.basis.z
+	if Input.is_action_pressed("move_backward"):
+		direction += transform.basis.z
+	if Input.is_action_pressed("move_left"):
+		current_yaw += turn_speed * delta
+	if Input.is_action_pressed("move_right"):
+		current_yaw -= turn_speed * delta
 
-	# Combine with vertical
-	v.x = horizontal_vel.x
-	v.z = horizontal_vel.z
+	direction = direction.normalized()
+	velocity.x = direction.x * walk_speed
+	velocity.z = direction.z * walk_speed
 
-	# Preserve Y velocity (from jump/gravity)
-	v.y = state.linear_velocity.y
-
-	# Apply final velocity
-	state.linear_velocity = v
-
-func handle_command(cmd: String):
-	match cmd:
-		"slow walking forward":
-			target_speed = 2.0
-			move_forward()
-		"fast walking forward":
-			target_speed = 6.0
-			move_forward()
-		"slow walking backward":
-			target_speed = 2.0
-			move_backward()
-		"fast walking backward":
-			target_speed = 6.0
-			move_backward()
-		"turning left":
-			turn_left()
-		"turning right":
-			turn_right()
-		"jump":
-			jump()
-		"stop", "idle":
-			jump()
-
-func move_forward():
-	move_dir = -transform.basis.z
-
-func move_backward():
-	move_dir = transform.basis.z
-
-func stop():
-	move_dir = Vector3.ZERO
-	target_speed = 0.0
-
-func turn_left():
-	if turn_timer <= 0.0:
-		rotate_y(deg_to_rad(-90))
-		turn_timer = turn_cooldown
-
-func turn_right():
-	if turn_timer <= 0.0:
-		rotate_y(deg_to_rad(90))
-		turn_timer = turn_cooldown
-
-func jump():
-	if is_grounded:
-		v.y = jump_strength
-		is_grounded = false  # avoid double-jumping
-
-func update_grounded_check():
-	var from = global_transform.origin
-	var to = from - Vector3.UP * ground_check_distance
-
-	var query = PhysicsRayQueryParameters3D.new()
-	query.from = from
-	query.to = to
-	query.exclude = [self]
-
-	var space = get_world_3d().direct_space_state
-	var result = space.intersect_ray(query)
-	is_grounded = result.size() > 0
+	# --- Move the player ---
+	move_and_slide()
