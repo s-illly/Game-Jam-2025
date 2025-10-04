@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://b8wg6ln207opt" path="res://Player.tscn" id="1_a202f"]
 [ext_resource type="Script" uid="uid://d1bb17y6yixyf" path="res://game.gd" id="1_r3fl7"]
 [ext_resource type="PackedScene" uid="uid://i1ihg4sum7hl" path="res://hallway_component.tscn" id="2_a0tk4"]
-[ext_resource type="Script" uid="uid://ct2h6dpm1kety" path="res://hallway_component.gd" id="4_jka67"]
+[ext_resource type="Script" path="res://hallway_component.gd" id="4_jka67"]
 [ext_resource type="AudioStream" uid="uid://qb3pp82856qb" path="res://audio/ES_Scream, Lo-FI, Vintage - Epidemic Sound.mp3" id="4_r3fl7"]
 
 [sub_resource type="Sky" id="Sky_a202f"]
@@ -12,6 +12,11 @@
 background_mode = 2
 background_energy_multiplier = 1.43
 sky = SubResource("Sky_a202f")
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.2489
+volumetric_fog_albedo = Color(0, 0, 0, 1)
+volumetric_fog_emission_energy = 232.23
+volumetric_fog_length = 196.13
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_noarx"]
 size = Vector3(1, 4.043335, 7.448242)
