@@ -27,16 +27,35 @@ var target_energy: float = 0.0
 var current_energy: float = 0.0
 var hand_detected: bool = false
 var last_hand_time: float = 0.0
+var python_process_id: int = -1
 
 func _ready():
-	current_yaw = rotation.y
-	current_pitch = cam.rotation.x
+	# Start TCP server
 	var result := listener.listen(65432)
 	if result != OK:
-		print("Failed to start server: ", result)
+		print("❌ Failed to start server:", result)
 	else:
-		print("Server is listening on port 65432")
+		print("✅ Server listening on port 65432")
 
+	# --- Launch Python hand tracking process ---
+	var python_path = "python3"  # use "python" on Windows
+	var script_path = ProjectSettings.globalize_path("res://python/HandTracking.py")
+
+	# Start process in the background
+	python_process_id = OS.create_process(python_path, PackedStringArray([script_path]))
+	if python_process_id == -1:
+		print("❌ Failed to launch hand tracker")
+	else:
+		print("🚀 Hand tracker launched (PID:", python_process_id, ")")
+
+func _exit_tree():
+	# Kill Python process when game closes
+	if python_process_id != -1:
+		OS.kill(python_process_id)
+		print("🧹 Hand tracker closed")
+		
+		
+		
 func _process(delta):
 	hand_detected = false
 
