@@ -111,7 +111,7 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_pressed("move_forward"):
 		direction += transform.basis.z
 	if Input.is_action_pressed("move_backward"):
-		direction -= transform.basis.z
+		rotation.y += PI
 	if Input.is_action_pressed("move_left"):
 		current_yaw += turn_speed * delta
 	if Input.is_action_pressed("move_right"):
