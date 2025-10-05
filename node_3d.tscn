@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://c5ev5ithmxmf3"]
+[gd_scene load_steps=17 format=3 uid="uid://c5ev5ithmxmf3"]
 
 [ext_resource type="PackedScene" uid="uid://b8wg6ln207opt" path="res://Player.tscn" id="1_a202f"]
 [ext_resource type="Script" uid="uid://d1bb17y6yixyf" path="res://game.gd" id="1_r3fl7"]
@@ -9,9 +9,9 @@
 [ext_resource type="AudioStream" uid="uid://co8solh5s2bl6" path="res://audio/ES_Horror 04 - Epidemic Sound.mp3" id="6_6iypd"]
 [ext_resource type="AudioStream" uid="uid://ocr7rlbw6r7c" path="res://audio/Q1 - Stage 6 Long decline is over.mp3" id="6_i5arm"]
 [ext_resource type="AudioStream" uid="uid://kjgd1neu3gk6" path="res://audio/ES_Impact, Horror 02 - Epidemic Sound.mp3" id="7_tereu"]
+[ext_resource type="Script" uid="uid://dygt68blh65h2" path="res://hallway_script.gd" id="7_wc5p8"]
 [ext_resource type="AudioStream" uid="uid://dowvh6fnrvid7" path="res://audio/ES_Ping, Eerie 01 - Epidemic Sound.mp3" id="8_cdqbm"]
 [ext_resource type="AudioStream" uid="uid://dhvxuan3uevi3" path="res://audio/ES_Horror, Ghostly 02 - Epidemic Sound.mp3" id="9_imku0"]
-[ext_resource type="Script" uid="uid://dygt68blh65h2" path="res://hallway_script.gd" id="7_wc5p8"]
 
 [sub_resource type="Sky" id="Sky_a202f"]
 
@@ -85,13 +85,5 @@ stream = ExtResource("8_cdqbm")
 stream = ExtResource("9_imku0")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Hallway_script/SoundZone"]
-
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("6_i5arm")
-max_db = -10.248
-
-[node name="Node2D" type="Node2D" parent="."]
-
-[node name="Node2D" type="Node2D" parent="Node2D"]
 
 [connection signal="body_entered" from="Hallway_script/SoundZone" to="." method="_on_sound_zone_body_entered"]

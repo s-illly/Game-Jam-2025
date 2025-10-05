@@ -4,11 +4,11 @@ extends Node3D
 
 # SFX players under hallway/SoundZone
 @onready var sfx_players: Array = [
-	$hallway/SoundZone/randomSound1,
-	$hallway/SoundZone/randomSound2,
-	$hallway/SoundZone/randomSound3,
-	$hallway/SoundZone/randomSound4,
-	$hallway/SoundZone/randomSound5
+	$Hallway_script/SoundZone/randomSound1,
+	$Hallway_script/SoundZone/randomSound2,
+	$Hallway_script/SoundZone/randomSound3,
+	$Hallway_script/SoundZone/randomSound4,
+	$Hallway_script/SoundZone/randomSound5
 ]
 
 # --- Random noise config ---
@@ -22,8 +22,8 @@ extends Node3D
 @export var prevent_overlap: bool = true  # stop a sound if another should fire
 
 func _ready():
-  DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-	#backgroundMusic.play()
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	backgroundMusic.play()
 	randomize()
 	_start_random_noise()
 
