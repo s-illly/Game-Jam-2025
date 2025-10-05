@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://qrr45kwsdqoc"]
 
-[ext_resource type="Script" uid="uid://cxxrv4ova6i78" path="res://play-button.gd" id="1_lti8b"]
+[ext_resource type="Script" uid="uid://dp74j5nyjyv82" path="res://menu.gd" id="1_lti8b"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -9,14 +9,49 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_lti8b")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Rules" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 1918.0
+offset_bottom = 1075.0
+
+[node name="Background" type="ColorRect" parent="Rules"]
 layout_mode = 0
 offset_right = 1924.0
 offset_bottom = 1076.0
 color = Color(0.08073846, 0.08780633, 0.0453991, 1)
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="Rules"]
+layout_mode = 0
+offset_left = 912.0
+offset_top = 328.0
+offset_right = 1174.0
+offset_bottom = 373.0
+theme_override_font_sizes/font_size = 32
+text = "menu"
+
+[node name="Button" type="Button" parent="Rules"]
+layout_mode = 0
+offset_left = 747.0
+offset_top = 600.0
+offset_right = 1118.0
+offset_bottom = 686.0
+text = "start"
+flat = true
+
+[node name="Title" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 1925.0
+offset_bottom = 1073.0
+
+[node name="Background" type="ColorRect" parent="Title"]
+layout_mode = 0
+offset_right = 1924.0
+offset_bottom = 1076.0
+color = Color(0.08073846, 0.08780633, 0.0453991, 1)
+
+[node name="Label" type="Label" parent="Title"]
 layout_mode = 0
 offset_left = 912.0
 offset_top = 328.0
@@ -25,7 +60,7 @@ offset_bottom = 373.0
 theme_override_font_sizes/font_size = 32
 text = "game"
 
-[node name="Button" type="Button" parent="."]
+[node name="Button" type="Button" parent="Title"]
 layout_mode = 0
 offset_left = 747.0
 offset_top = 600.0
@@ -33,6 +68,6 @@ offset_right = 1118.0
 offset_bottom = 686.0
 text = "play"
 flat = true
-script = ExtResource("1_lti8b")
 
-[connection signal="pressed" from="Button" to="Button" method="_on_pressed"]
+[connection signal="pressed" from="Rules/Button" to="." method="rules_button_pressed"]
+[connection signal="pressed" from="Title/Button" to="." method="title_button_pressed"]
