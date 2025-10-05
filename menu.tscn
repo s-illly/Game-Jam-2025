@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://0rcir7f06lnt"]
 
-[ext_resource type="Script" path="res://menu.gd" id="1_lti8b"]
+[ext_resource type="Script" uid="uid://dp74j5nyjyv82" path="res://menu.gd" id="1_lti8b"]
 [ext_resource type="Texture2D" uid="uid://cemeyadpxd8d4" path="res://textures/creepy hallway.png" id="2_4hy44"]
 [ext_resource type="FontFile" uid="uid://d0maugsx2afih" path="res://fonts/Inria_Serif/InriaSerif-Italic.ttf" id="2_mae5d"]
 [ext_resource type="FontFile" uid="uid://dqvclhqtlh2sb" path="res://fonts/Saira_Semi_Condensed/SairaSemiCondensed-Medium.ttf" id="3_4hy44"]
@@ -109,7 +109,7 @@ theme_override_fonts/font = ExtResource("3_4hy44")
 theme_override_font_sizes/font_size = 96
 text = "PLAY"
 
-[node name="Button2" type="Button" parent="Title"]
+[node name="ExitButton" type="Button" parent="Title"]
 layout_mode = 0
 offset_left = 1104.0
 offset_top = 610.0
@@ -121,4 +121,4 @@ text = "EXIT"
 
 [connection signal="pressed" from="Rules/Button" to="." method="rules_button_pressed"]
 [connection signal="pressed" from="Title/Button" to="." method="title_button_pressed"]
-[connection signal="pressed" from="Title/Button2" to="." method="title_button_pressed"]
+[connection signal="pressed" from="Title/ExitButton" to="." method="exit_button_pressed"]
