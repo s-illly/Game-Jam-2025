@@ -137,7 +137,7 @@ func _physics_process(delta: float) -> void:
 	cam.rotation.x = current_pitch
 
 	# --- Random nudge to look back ---
-	if randf() < 0.02:
+	if randf() < 0.0002:
 		trigger_forced_look_back()
 
 	# --- Gravity ---
@@ -166,7 +166,28 @@ func _physics_process(delta: float) -> void:
 	current_energy = lerp(current_energy, target_energy, energy_smooth)
 	if flashlight:
 		flashlight.light_energy = current_energy * flashlight_max_energy
-
+	if current_energy < 0.1:
+		ai_spawn_timer += delta
+		if ai_spawn_timer >= ai_spawn_delay and not ai_spawned and ai_scene:
+			var ai_instance = ai_scene.instantiate()
+			var forward = transform.basis.z.normalized()
+			var spawn_pos = global_position + forward * 3.0  # spawn 3m in front
+			ai_instance.global_position = spawn_pos
+			get_parent().add_child(ai_instance)
+			ai_spawned = true
+			print("⚠️ Flashlight AI spawned!")
+			
+			# Schedule automatic despawn
+			var timer = get_tree().create_timer(ai_despawn_delay)
+			timer.timeout.connect(func():
+				if ai_instance and ai_instance.is_inside_tree():
+					ai_instance.queue_free()
+					print("💨 Flashlight AI despawned"))
+					
+	else:
+		ai_spawn_timer = 0.0
+		ai_spawned = false
+	
 	# --- Footstep sounds ---
 	if Input.is_action_pressed("move_forward"):
 		var rate: float = base_steps_per_sec
