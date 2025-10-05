@@ -29,6 +29,13 @@ var hand_detected: bool = false
 var last_hand_time: float = 0.0
 var python_process_id: int = -1
 
+
+@export var ai_scene: PackedScene
+@export var ai_spawn_delay: float = 3.0  # seconds after flashlight off
+var ai_spawn_timer: float = 0.0
+var ai_spawned: bool = false
+@export var ai_despawn_delay: float = 3.0
+
 func _ready():
 	# Start TCP server
 	var result := listener.listen(65432)
@@ -105,7 +112,27 @@ func _physics_process(delta: float) -> void:
 	current_energy = lerp(current_energy, target_energy, energy_smooth)
 	if flashlight:
 		flashlight.light_energy = current_energy * flashlight_max_energy
-
+	if current_energy < 0.1:
+		ai_spawn_timer += delta
+		if ai_spawn_timer >= ai_spawn_delay and not ai_spawned and ai_scene:
+			var ai_instance = ai_scene.instantiate()
+			var forward = transform.basis.z.normalized()
+			var spawn_pos = global_position + forward * 3.0  # spawn 3m in front
+			ai_instance.global_position = spawn_pos
+			get_parent().add_child(ai_instance)
+			ai_spawned = true
+			print("⚠️ Flashlight AI spawned!")
+			
+			# Schedule automatic despawn
+			var timer = get_tree().create_timer(ai_despawn_delay)
+			timer.timeout.connect(func():
+				if ai_instance and ai_instance.is_inside_tree():
+					ai_instance.queue_free()
+					print("💨 Flashlight AI despawned"))
+					
+	else:
+		ai_spawn_timer = 0.0
+		ai_spawned = false
 	# Keyboard movement
 	var direction = Vector3.ZERO
 	# Move backward takes priority — disables forward motion

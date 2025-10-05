@@ -7,7 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://co8solh5s2bl6" path="res://audio/ES_Horror 04 - Epidemic Sound.mp3" id="6_6iypd"]
 [ext_resource type="AudioStream" uid="uid://ocr7rlbw6r7c" path="res://audio/Q1 - Stage 6 Long decline is over.mp3" id="6_i5arm"]
 [ext_resource type="AudioStream" uid="uid://kjgd1neu3gk6" path="res://audio/ES_Impact, Horror 02 - Epidemic Sound.mp3" id="7_tereu"]
-[ext_resource type="Script" path="res://hallway_script.gd" id="7_wc5p8"]
+[ext_resource type="Script" uid="uid://dygt68blh65h2" path="res://hallway_script.gd" id="7_wc5p8"]
 [ext_resource type="AudioStream" uid="uid://dowvh6fnrvid7" path="res://audio/ES_Ping, Eerie 01 - Epidemic Sound.mp3" id="8_cdqbm"]
 [ext_resource type="AudioStream" uid="uid://dhvxuan3uevi3" path="res://audio/ES_Horror, Ghostly 02 - Epidemic Sound.mp3" id="9_imku0"]
 [ext_resource type="Script" uid="uid://b8mltgh4l67xr" path="res://AI_script.gd" id="11_cdqbm"]
@@ -39,6 +39,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.041894, 0)
 
 [node name="Player" parent="." instance=ExtResource("1_a202f")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.212, 1.5, 5.489)
+ai_scene = ExtResource("12_imku0")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("6_i5arm")
