@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dhvxuan3uevi3"
+path="res://.godot/imported/ES_Horror, Ghostly 02 - Epidemic Sound.mp3-e84a420dc04a30655a985af89c9847d4.mp3str"
+
+[deps]
+
+source_file="res://audio/ES_Horror, Ghostly 02 - Epidemic Sound.mp3"
+dest_files=["res://.godot/imported/ES_Horror, Ghostly 02 - Epidemic Sound.mp3-e84a420dc04a30655a985af89c9847d4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

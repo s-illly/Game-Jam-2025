@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dowvh6fnrvid7"
+path="res://.godot/imported/ES_Ping, Eerie 01 - Epidemic Sound.mp3-71119bea3ccdc579b2afb6f9771ef68d.mp3str"
+
+[deps]
+
+source_file="res://audio/ES_Ping, Eerie 01 - Epidemic Sound.mp3"
+dest_files=["res://.godot/imported/ES_Ping, Eerie 01 - Epidemic Sound.mp3-71119bea3ccdc579b2afb6f9771ef68d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
