@@ -1,0 +1,38 @@
+[gd_scene load_steps=2 format=3 uid="uid://qrr45kwsdqoc"]
+
+[ext_resource type="Script" uid="uid://cxxrv4ova6i78" path="res://play-button.gd" id="1_lti8b"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1924.0
+offset_bottom = 1076.0
+color = Color(0.08073846, 0.08780633, 0.0453991, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 912.0
+offset_top = 328.0
+offset_right = 1174.0
+offset_bottom = 373.0
+theme_override_font_sizes/font_size = 32
+text = "game"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 747.0
+offset_top = 600.0
+offset_right = 1118.0
+offset_bottom = 686.0
+text = "play"
+flat = true
+script = ExtResource("1_lti8b")
+
+[connection signal="pressed" from="Button" to="Button" method="_on_pressed"]

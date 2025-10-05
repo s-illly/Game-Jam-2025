@@ -43,7 +43,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 286.20355, -6.0882797, 1.7037
 shape = SubResource("BoxShape3D_wdq1x")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.693857, 3.3910968, 3.4770994)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.693857, 3.744035, 3.4770994)
 light_color = Color(0.83137256, 0.8980392, 0.7294118, 1)
 light_energy = 0.67
 omni_range = 0.7517668

@@ -52,4 +52,8 @@ shape = SubResource("BoxShape3D_noarx")
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Hallway_script/SoundZone"]
 stream = ExtResource("4_r3fl7")
 
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="Node2D"]
+
 [connection signal="body_entered" from="Hallway_script/SoundZone" to="." method="_on_sound_zone_body_entered"]

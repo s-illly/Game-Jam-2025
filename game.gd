@@ -3,6 +3,7 @@ extends Node3D
 @onready var backgroundMusic = $AudioStreamPlayer3D
 
 func _ready():
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	backgroundMusic.play()
 	await get_tree().create_timer(10.0).timeout
 	sound.play()
