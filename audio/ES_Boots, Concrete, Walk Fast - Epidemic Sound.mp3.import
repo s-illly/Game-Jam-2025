@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://byvd4txdr31do"
+path="res://.godot/imported/ES_Boots, Concrete, Walk Fast - Epidemic Sound.mp3-ea93700489522d23b27a7fb094380bea.mp3str"
+
+[deps]
+
+source_file="res://audio/ES_Boots, Concrete, Walk Fast - Epidemic Sound.mp3"
+dest_files=["res://.godot/imported/ES_Boots, Concrete, Walk Fast - Epidemic Sound.mp3-ea93700489522d23b27a7fb094380bea.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
