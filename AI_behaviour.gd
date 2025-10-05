@@ -41,15 +41,16 @@ func _physics_process(delta):
 		grace_timer -= delta
 		return
 
-	# Track if player looks back
-	if is_player_looking_behind():
-		times_player_looked_back += 1
-
-	# --- Front spawn logic ---
+	# --- Front spawn behavior (non-chasing) ---
 	if spawn_in_front:
-		# Despawn if player hand is out
+		# Disappear if player’s light is off or after a few seconds
 		if player_light and player_light.light_energy <= 0.01:
 			queue_free()
+			return
+		despawn_timer += delta
+		if despawn_timer >= stay_duration:
+			queue_free()
+			print("Despawned AI (front)")
 		return
 
 	# --- Chasing behavior ---
@@ -58,84 +59,51 @@ func _physics_process(delta):
 		velocity = direction * move_speed
 		move_and_slide()
 
-		# Random ambient mute
+		# Random ambient mute for tension
 		if ambient_audio and randf() < 0.01:
 			ambient_audio.volume_db = -80
 
-		# Optional: despawn after chase_time exceeded
 		despawn_timer += delta
 		if despawn_timer >= chase_time:
 			queue_free()
-			print("Despawned AI")
-			return
-
+			print("Despawned AI (chase end)")
 	else:
-		# AI spawned behind player, just wait and then despawn
+		# AI that’s behind but not actively chasing (rare)
 		despawn_timer += delta
 		if despawn_timer >= stay_duration:
 			queue_free()
-			print("Despawned AI behind")
-			return
-
-	if not player:
-		return
-
-	# Grace period before chasing
-	if grace_timer > 0:
-		grace_timer -= delta
-		return
-
-	# Track if player looks back
-	if is_player_looking_behind():
-		times_player_looked_back += 1
-
-	# --- Spawn behaviors ---
-	if spawn_in_front:
-		# Disappear if player hand is out (hand_energy <= 0.01)
-		if player_light and player_light.light_energy <= 0.01:
-			queue_free()
-		return
-
-	if is_chasing:
-		var direction = (player.global_position - global_position).normalized()
-		velocity = direction * move_speed
-		move_and_slide()
-
-		# Random ambient mute
-		if ambient_audio and randf() < 0.01:
-			ambient_audio.volume_db = -80
-	else:
-		# AI behind player, wait a bit and then disappear
-		despawn_timer += delta
-		if despawn_timer >= stay_duration:
-			queue_free()
+			print("Despawned AI (passive)")
 
 func spawn_relative_to_player():
 	if not player:
 		return
 
-	# Decide spawn side: usually behind, sometimes left/right, rarely in front if player looked back too much
+	# --- Decide spawn side ---
 	if times_player_looked_back >= back_look_threshold:
 		spawn_in_front = true
 	else:
-		spawn_in_front = randf() < 0.2
+		spawn_in_front = randf() < 0.2  # 20% chance otherwise
 
 	var spawn_pos = player.global_position
-	var spawn_distance = randf_range(spawn_distance_min, spawn_distance_max)
+	var spawn_distance: float
 
 	if spawn_in_front:
+		# --- FRONT SPAWN: slightly closer distance ---
+		spawn_distance = randf_range(spawn_distance_min * 0.6, spawn_distance_min * 0.9)
 		spawn_pos += player.global_transform.basis.z * spawn_distance
-		can_kill = true
 		is_chasing = false
+		can_kill = false
 	else:
-		# Usually behind
+		# --- BEHIND SPAWN: normal chase distance ---
+		spawn_distance = randf_range(spawn_distance_min, spawn_distance_max)
 		spawn_pos -= player.global_transform.basis.z * spawn_distance
 		is_chasing = true
+		can_kill = true
 
-	# Random left/right offset
+	# --- Random left/right offset ---
 	spawn_pos.x += randf_range(-horizontal_offset, horizontal_offset)
 
-	# Raycast to find floor
+	# --- Raycast to find floor ---
 	var ray_origin = spawn_pos + Vector3(0, 5, 0)
 	var ray_end = spawn_pos + Vector3(0, -50, 0)
 	var space_state = get_world_3d().direct_space_state
@@ -143,13 +111,15 @@ func spawn_relative_to_player():
 	ray_params.from = ray_origin
 	ray_params.to = ray_end
 	var result = space_state.intersect_ray(ray_params)
-	if result:
+	if result.size() > 0:
 		spawn_pos.y = result.position.y
 	else:
 		spawn_pos.y = player.global_position.y
 
+	# --- Apply spawn position ---
 	global_position = spawn_pos
 	look_at(player.global_position)
+
 
 func is_player_looking_behind() -> bool:
 	if not player:
