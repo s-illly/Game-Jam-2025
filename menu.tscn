@@ -6,6 +6,8 @@
 [ext_resource type="FontFile" uid="uid://dqvclhqtlh2sb" path="res://fonts/Saira_Semi_Condensed/SairaSemiCondensed-Medium.ttf" id="3_4hy44"]
 [ext_resource type="FontFile" uid="uid://dqqcoh4yk7v20" path="res://fonts/Saira_Semi_Condensed/SairaSemiCondensed-Light.ttf" id="5_ytr4m"]
 
+[sub_resource type="Theme" id="Theme_lti8b"]
+
 [node name="Control" type="Control"]
 layout_mode = 3
 anchors_preset = 15

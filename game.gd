@@ -21,6 +21,7 @@ extends Node3D
 @export var max_db: float = 0.0
 @export var prevent_overlap: bool = true  # stop a sound if another should fire
 
+
 func _ready():
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	backgroundMusic.play()
@@ -53,8 +54,3 @@ func _play_random_sfx() -> void:
 	p.volume_db = randf_range(min_db, max_db)
 	p.seek(0.0)
 	p.play()
-
-func _on_sound_zone_body_entered(body: CharacterBody3D) -> void:
-	if body.name == "Player":
-		_play_random_sfx()
-		print("hello")
