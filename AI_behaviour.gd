@@ -24,6 +24,13 @@ var spawn_in_front = false
 var despawn_timer = 0.0
 var stay_duration = 3.0
 
+# --- Add new state variables ---
+var look_back_timer: float = 0.0
+@export var required_look_back_time: float = 2.0  # seconds player must look back to despawn AI
+@export var force_look_strength_min: float = 2.0 # min nudge strength
+@export var force_look_strength_max: float = 2.0 # max nudge strength
+@export var look_back_event_chance: float = 0.5  # chance per frame to nudge player
+
 func _ready():
 	randomize()
 	grace_timer = grace_period
@@ -32,47 +39,46 @@ func _ready():
 	ambient_audio = get_parent().get_node_or_null("AudioStreamPlayer3D")
 	spawn_relative_to_player()
 
-func _physics_process(delta):
+
+func _physics_process(delta: float) -> void:
 	if not player:
 		return
 
-	# Grace period before AI acts
-	if grace_timer > 0:
-		grace_timer -= delta
-		return
-
-	# --- Front spawn behavior (non-chasing) ---
+	# Front spawn AI behavior
 	if spawn_in_front:
-		# Disappear if player’s light is off or after a few seconds
-		if player_light and player_light.light_energy <= 0.01:
-			queue_free()
-			return
 		despawn_timer += delta
 		if despawn_timer >= stay_duration:
 			queue_free()
-			print("Despawned AI (front)")
+			print("AI despawned (front spawn)")
 		return
 
-	# --- Chasing behavior ---
-	if is_chasing:
-		var direction = (player.global_position - global_position).normalized()
-		velocity = direction * move_speed
-		move_and_slide()
+	# --- AI behind player ---
+	var to_player = (player.global_position - global_position).length()
 
-		# Random ambient mute for tension
-		if ambient_audio and randf() < 0.01:
-			ambient_audio.volume_db = -80
-
-		despawn_timer += delta
-		if despawn_timer >= chase_time:
+	# Player is looking at AI
+	if is_player_looking_behind():
+		look_back_timer += delta
+		if look_back_timer >= required_look_back_time:
 			queue_free()
-			print("Despawned AI (chase end)")
+			print("AI despawned because player looked back")
+			return
 	else:
-		# AI that’s behind but not actively chasing (rare)
-		despawn_timer += delta
-		if despawn_timer >= stay_duration:
-			queue_free()
-			print("Despawned AI (passive)")
+		look_back_timer = 0.0
+		# Randomly nudge player to look back if AI is very close
+		if to_player <= 4.0 and randf() < look_back_event_chance:
+			if player.has_method("force_look_back"):
+				var strength = randf_range(force_look_strength_min, force_look_strength_max)
+				player.force_look_back(strength)
+
+	# Normal chasing
+	var direction = (player.global_position - global_position).normalized()
+	velocity = direction * move_speed
+	move_and_slide()
+	despawn_timer += delta
+	if despawn_timer >= chase_time:
+		queue_free()
+		print("AI despawned (chase end)")
+		
 
 func spawn_relative_to_player():
 	if not player:

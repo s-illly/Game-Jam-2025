@@ -47,10 +47,12 @@ theme_override_fonts/font = ExtResource("2_mae5d")
 theme_override_font_sizes/font_size = 64
 text = "Hold your hand to the camera to control your flashlight
 Turn your flashlight off to hide
+WASD to move
 Survive."
 horizontal_alignment = 1
 
 [node name="Title" type="Control" parent="."]
+visible = false
 anchors_preset = 0
 offset_right = 1925.0
 offset_bottom = 1073.0

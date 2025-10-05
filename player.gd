@@ -6,14 +6,14 @@ var client: StreamPeerTCP = null
 
 # --- Footsteps ---
 @onready var foot_audio: AudioStreamPlayer3D = $Footsteps
-@export var base_steps_per_sec: float = 1.8   # cadence when walking forward
+@export var base_steps_per_sec: float = 1.8
 @export var ref_speed: float = 4.0
 @export var min_walk_speed: float = 0.4
-@export var step_duration: float = 0.25       # seconds of audio to play per step from the 9s file
+@export var step_duration: float = 0.25
 
 var _step_timer: float = 0.0
 var _left_foot: bool = true
-var _step_play_t: float = 0.0                 # tracks how long current step has been playing
+var _step_play_t: float = 0.0
 
 # --- Camera ---
 @onready var cam: Camera3D = $Camera3D
@@ -22,7 +22,7 @@ var _step_play_t: float = 0.0                 # tracks how long current step has
 # --- Movement ---
 @export var walk_speed: float = 2.0
 @export var turn_speed: float = 2.5
-@export var gravity: float = 9.8              # helps physics feel right even if we ignore is_on_floor for steps
+@export var gravity: float = 9.8
 
 # --- Hand-controlled look ---
 var target_yaw: float = 0.0
@@ -31,19 +31,25 @@ var current_yaw: float = 0.0
 var current_pitch: float = 0.0
 @export var look_smooth: float = 0.1
 
+# --- Forced look state ---
+var is_forced_looking_back: bool = false
+var forced_look_timer: float = 0.0
+@export var forced_look_duration: float = 0.5
+@export var forced_look_strength: float = 2
+
 # --- Flashlight control ---
 @export var energy_smooth: float = 0.1
 @export var flashlight_max_energy: float = 8.0
-@export var fade_delay: float = 1.0  # seconds before fade starts
+@export var fade_delay: float = 1.0
 var target_energy: float = 0.0
 var current_energy: float = 0.0
 var hand_detected: bool = false
 var last_hand_time: float = 0.0
 var python_process_id: int = -1
 
-
+# --- AI spawn ---
 @export var ai_scene: PackedScene
-@export var ai_spawn_delay: float = 6.0  # seconds after flashlight off
+@export var ai_spawn_delay: float = 6.0
 var ai_spawn_timer: float = 0.0
 var ai_spawned: bool = false
 @export var ai_despawn_delay: float = 2.0
@@ -57,7 +63,7 @@ func _ready():
 		print("✅ Server listening on port 65432")
 
 	# Launch Python hand tracking process
-	var python_path := "python3"  # use "python" on Windows
+	var python_path := "python3"
 	var script_path := ProjectSettings.globalize_path("res://python/HandTracking.py")
 	python_process_id = OS.create_process(python_path, PackedStringArray([script_path]))
 	if python_process_id == -1:
@@ -106,49 +112,44 @@ func set_target_look(nx: float, ny: float) -> void:
 	target_energy = 1.0
 
 func _physics_process(delta: float) -> void:
+	# --- Forced backward glance ---
+	if is_forced_looking_back:
+		 # Force camera instantly 180 degrees behind
+		var behind_yaw = deg_to_rad(180)
+		current_yaw = behind_yaw
+		rotation.y = current_yaw
+		# Keep pitch unchanged
+		cam.rotation.x = current_pitch  # keep pitch unaffected
+
+		# Stop all movement while looking back
+		velocity = Vector3.ZERO
+
+		# Count down timer
+		forced_look_timer -= delta
+		if forced_look_timer <= 0:
+			is_forced_looking_back = false
+		return  # skip normal movement
+
 	# --- Smooth camera rotation from hand tracking ---
 	current_yaw = lerp_angle(current_yaw, target_yaw, look_smooth)
 	current_pitch = lerp_angle(current_pitch, target_pitch, look_smooth)
 	rotation.y = current_yaw
 	cam.rotation.x = current_pitch
 
-	# --- Gravity (optional if you want physics consistency) ---
+	# --- Random nudge to look back ---
+	if randf() < 0.02:
+		trigger_forced_look_back()
+
+	# --- Gravity ---
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 	else:
 		velocity.y = 0.0
 
-	# --- Tank-style movement ---
+	# --- Movement ---
 	var direction := Vector3.ZERO
-	
-	# Smooth flashlight energy
-	current_energy = lerp(current_energy, target_energy, energy_smooth)
-	if flashlight:
-		flashlight.light_energy = current_energy * flashlight_max_energy
-	if current_energy < 0.1:
-		ai_spawn_timer += delta
-		if ai_spawn_timer >= ai_spawn_delay and not ai_spawned and ai_scene:
-			var ai_instance = ai_scene.instantiate()
-			var forward = transform.basis.z.normalized()
-			var spawn_pos = global_position + forward * 3.0  # spawn 3m in front
-			ai_instance.global_position = spawn_pos
-			get_parent().add_child(ai_instance)
-			ai_spawned = true
-			print("⚠️ Flashlight AI spawned!")
-			
-			# Schedule automatic despawn
-			var timer = get_tree().create_timer(ai_despawn_delay)
-			timer.timeout.connect(func():
-				if ai_instance and ai_instance.is_inside_tree():
-					ai_instance.queue_free()
-					print("💨 Flashlight AI despawned"))
-					
-	else:
-		ai_spawn_timer = 0.0
-		ai_spawned = false
-	# Move backward takes priority — disables forward motion
 	if Input.is_action_pressed("move_backward"):
-		rotation.y += PI  
+		rotation.y += PI
 	elif Input.is_action_pressed("move_forward"):
 		direction += transform.basis.z
 	if Input.is_action_pressed("move_left"):
@@ -159,7 +160,6 @@ func _physics_process(delta: float) -> void:
 	direction = direction.normalized()
 	velocity.x = direction.x * walk_speed
 	velocity.z = direction.z * walk_speed
-
 	move_and_slide()
 
 	# --- Flashlight smoothing ---
@@ -167,7 +167,7 @@ func _physics_process(delta: float) -> void:
 	if flashlight:
 		flashlight.light_energy = current_energy * flashlight_max_energy
 
-	# --- Footstep sounds only when walking forward ---
+	# --- Footstep sounds ---
 	if Input.is_action_pressed("move_forward"):
 		var rate: float = base_steps_per_sec
 		_step_timer -= delta
@@ -189,26 +189,37 @@ func _physics_process(delta: float) -> void:
 		_step_play_t = 0.0
 
 
+func trigger_forced_look_back():
+	is_forced_looking_back = true
+	forced_look_timer = forced_look_duration
+	print("🚨 Forced backward glance triggered!")
+
+
+func force_look_back(strength: float = 2.0):
+	var behind_yaw = deg_to_rad(180)
+	target_yaw = lerp_angle(target_yaw, behind_yaw, strength)
+
+
 func _play_footstep_slice() -> void:
 	if foot_audio == null:
 		push_warning("[foot] Missing Footsteps node")
 		return
 	if foot_audio.stream == null:
-		push_warning("[foot] Footsteps stream is NULL (assign your 9s file or, better, short clips).")
+		push_warning("[foot] Footsteps stream is NULL.")
 		return
 
 	# Small variation
 	foot_audio.pitch_scale = randf_range(0.97, 1.03)
 	foot_audio.volume_db = randf_range(-1.0, 0.0)
 
-	# Start at a random position inside the long file, so each slice sounds different
+	# Start at a random position inside the long file
 	var total_len: float = 0.0
 	if "get_length" in foot_audio.stream:
 		total_len = foot_audio.stream.get_length()
 	var max_start: float = max(0.0, total_len - step_duration)
-	var start_pos: float = randf_range(0.0, max_start) if total_len > 0.0 else 0.0   # ✅ explicit float type fixes warning
+	var start_pos: float = randf_range(0.0, max_start) if total_len > 0.0 else 0.0
 
-	# Optional: alternate left/right panning by moving the 3D emitter slightly
+	# Alternate left/right panning
 	if _left_foot:
 		foot_audio.position.x = 0.12
 	else:
