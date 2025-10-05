@@ -31,10 +31,10 @@ var python_process_id: int = -1
 
 
 @export var ai_scene: PackedScene
-@export var ai_spawn_delay: float = 3.0  # seconds after flashlight off
+@export var ai_spawn_delay: float = 6.0  # seconds after flashlight off
 var ai_spawn_timer: float = 0.0
 var ai_spawned: bool = false
-@export var ai_despawn_delay: float = 3.0
+@export var ai_despawn_delay: float = 2.0
 
 func _ready():
 	# Start TCP server

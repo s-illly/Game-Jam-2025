@@ -1,12 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://0rcir7f06lnt"]
+[gd_scene load_steps=6 format=3 uid="uid://qrr45kwsdqoc"]
 
 [ext_resource type="Script" uid="uid://dp74j5nyjyv82" path="res://menu.gd" id="1_lti8b"]
 [ext_resource type="Texture2D" uid="uid://cemeyadpxd8d4" path="res://textures/creepy hallway.png" id="2_4hy44"]
 [ext_resource type="FontFile" uid="uid://d0maugsx2afih" path="res://fonts/Inria_Serif/InriaSerif-Italic.ttf" id="2_mae5d"]
 [ext_resource type="FontFile" uid="uid://dqvclhqtlh2sb" path="res://fonts/Saira_Semi_Condensed/SairaSemiCondensed-Medium.ttf" id="3_4hy44"]
 [ext_resource type="FontFile" uid="uid://dqqcoh4yk7v20" path="res://fonts/Saira_Semi_Condensed/SairaSemiCondensed-Light.ttf" id="5_ytr4m"]
-
-[sub_resource type="Theme" id="Theme_lti8b"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -41,15 +39,15 @@ flat = true
 
 [node name="RulesDescription" type="Label" parent="Rules"]
 layout_mode = 0
-offset_left = 548.0
-offset_top = 317.0
-offset_right = 1412.0
-offset_bottom = 557.0
+offset_left = 173.0
+offset_top = 334.0
+offset_right = 1800.0
+offset_bottom = 574.0
 theme_override_fonts/font = ExtResource("2_mae5d")
 theme_override_font_sizes/font_size = 64
-text = "You are trapped in a hallway.
-Make it to the end.
-Don't look back..."
+text = "Hold your hand to the camera to control your flashlight
+Turn your flashlight off to hide
+Survive."
 horizontal_alignment = 1
 
 [node name="Title" type="Control" parent="."]
