@@ -4,6 +4,17 @@ extends CharacterBody3D
 var listener: TCPServer = TCPServer.new()
 var client: StreamPeerTCP = null
 
+# --- Footsteps ---
+@onready var foot_audio: AudioStreamPlayer3D = $Footsteps
+@export var base_steps_per_sec: float = 1.8   # cadence when walking forward
+@export var ref_speed: float = 4.0
+@export var min_walk_speed: float = 0.4
+@export var step_duration: float = 0.25       # seconds of audio to play per step from the 9s file
+
+var _step_timer: float = 0.0
+var _left_foot: bool = true
+var _step_play_t: float = 0.0                 # tracks how long current step has been playing
+
 # --- Camera ---
 @onready var cam: Camera3D = $Camera3D
 @onready var flashlight: SpotLight3D = $Camera3D/Node3D/SpotLight3D
@@ -11,6 +22,7 @@ var client: StreamPeerTCP = null
 # --- Movement ---
 @export var walk_speed: float = 2.0
 @export var turn_speed: float = 2.5
+@export var gravity: float = 9.8              # helps physics feel right even if we ignore is_on_floor for steps
 
 # --- Hand-controlled look ---
 var target_yaw: float = 0.0
@@ -44,25 +56,21 @@ func _ready():
 	else:
 		print("✅ Server listening on port 65432")
 
-	# --- Launch Python hand tracking process ---
-	var python_path = "python3"  # use "python" on Windows
-	var script_path = ProjectSettings.globalize_path("res://python/HandTracking.py")
-
-	# Start process in the background
+	# Launch Python hand tracking process
+	var python_path := "python3"  # use "python" on Windows
+	var script_path := ProjectSettings.globalize_path("res://python/HandTracking.py")
 	python_process_id = OS.create_process(python_path, PackedStringArray([script_path]))
 	if python_process_id == -1:
 		print("❌ Failed to launch hand tracker")
 	else:
 		print("🚀 Hand tracker launched (PID:", python_process_id, ")")
 
-func _exit_tree():
-	# Kill Python process when game closes
+func _exit_tree() -> void:
 	if python_process_id != -1:
 		OS.kill(python_process_id)
 		print("🧹 Hand tracker closed")
 
-
-func _process(delta):
+func _process(delta: float) -> void:
 	hand_detected = false
 
 	# Accept new client
@@ -76,38 +84,47 @@ func _process(delta):
 		for line in message.split("\n", false):
 			if line == "":
 				continue
-			var parts = line.split(",")
+			var parts := line.split(",")
 			if parts.size() == 2:
-				var nx = parts[0].to_float()
-				var ny = parts[1].to_float()
+				var nx := parts[0].to_float()
+				var ny := parts[1].to_float()
 				set_target_look(nx, ny)
 				hand_detected = true
 				last_hand_time = Time.get_unix_time_from_system()
 
 	# Handle flashlight timeout fade
-	var time_since_hand = Time.get_unix_time_from_system() - last_hand_time
+	var time_since_hand := Time.get_unix_time_from_system() - last_hand_time
 	if time_since_hand > fade_delay:
 		target_energy = 0.0
 
 func set_target_look(nx: float, ny: float) -> void:
-	# Map X -1..1 to yaw range (-60° to 60°)
-	var yaw_range = deg_to_rad(60.0)
+	var yaw_range := deg_to_rad(60.0)
 	target_yaw = nx * yaw_range
 
-	# Map Y -1..1 to pitch range (-40° to 40°)
-	var pitch_range = deg_to_rad(40.0)
-	target_pitch = clamp(-ny * pitch_range, deg_to_rad(-40), deg_to_rad(40))
-
-	# Flashlight on when hand is detected
+	var pitch_range := deg_to_rad(40.0)
+	target_pitch = clamp(-ny * pitch_range, deg_to_rad(-40.0), deg_to_rad(40.0))
 	target_energy = 1.0
 
 func _physics_process(delta: float) -> void:
-	# Smooth rotation
+	# --- Smooth camera rotation from hand tracking ---
 	current_yaw = lerp_angle(current_yaw, target_yaw, look_smooth)
 	current_pitch = lerp_angle(current_pitch, target_pitch, look_smooth)
 	rotation.y = current_yaw
 	cam.rotation.x = current_pitch
 
+	# --- Gravity (optional if you want physics consistency) ---
+	if not is_on_floor():
+		velocity.y -= gravity * delta
+	else:
+		velocity.y = 0.0
+
+	# --- Tank-style movement ---
+	var direction := Vector3.ZERO
+
+	if Input.is_action_pressed("move_forward"):
+		direction += transform.basis.z   # move in local forward direction
+	if Input.is_action_pressed("move_backward"):
+		rotation.y += PI                 # instantly turn around, no backward motion
 	# Smooth flashlight energy
 	current_energy = lerp(current_energy, target_energy, energy_smooth)
 	if flashlight:
@@ -150,3 +167,61 @@ func _physics_process(delta: float) -> void:
 	velocity.z = direction.z * walk_speed
 
 	move_and_slide()
+
+	# --- Flashlight smoothing ---
+	current_energy = lerp(current_energy, target_energy, energy_smooth)
+	if flashlight:
+		flashlight.light_energy = current_energy * flashlight_max_energy
+
+	# --- Footstep sounds only when walking forward ---
+	if Input.is_action_pressed("move_forward"):
+		var rate: float = base_steps_per_sec
+		_step_timer -= delta
+		if _step_timer <= 0.0:
+			_play_footstep_slice()
+			_step_timer = 1.0 / rate
+	else:
+		if foot_audio and foot_audio.playing:
+			foot_audio.stop()
+			_step_play_t = 0.0
+		_step_timer = min(_step_timer, 0.1)
+
+	if foot_audio and foot_audio.playing:
+		_step_play_t += delta
+		if _step_play_t >= step_duration:
+			foot_audio.stop()
+			_step_play_t = 0.0
+	else:
+		_step_play_t = 0.0
+
+
+func _play_footstep_slice() -> void:
+	if foot_audio == null:
+		push_warning("[foot] Missing Footsteps node")
+		return
+	if foot_audio.stream == null:
+		push_warning("[foot] Footsteps stream is NULL (assign your 9s file or, better, short clips).")
+		return
+
+	# Small variation
+	foot_audio.pitch_scale = randf_range(0.97, 1.03)
+	foot_audio.volume_db = randf_range(-1.0, 0.0)
+
+	# Start at a random position inside the long file, so each slice sounds different
+	var total_len: float = 0.0
+	if "get_length" in foot_audio.stream:
+		total_len = foot_audio.stream.get_length()
+	var max_start: float = max(0.0, total_len - step_duration)
+	var start_pos: float = randf_range(0.0, max_start) if total_len > 0.0 else 0.0   # ✅ explicit float type fixes warning
+
+	# Optional: alternate left/right panning by moving the 3D emitter slightly
+	if _left_foot:
+		foot_audio.position.x = 0.12
+	else:
+		foot_audio.position.x = -0.12
+	_left_foot = not _left_foot
+
+	# Play the slice
+	foot_audio.stop()
+	foot_audio.play(start_pos)
+	_step_play_t = 0.0
