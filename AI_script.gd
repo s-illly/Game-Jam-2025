@@ -4,10 +4,10 @@ extends Node3D
 @export var ai_scene: PackedScene
 @export var player_path: NodePath  # assign Player node in Inspector
 @export var spawn_interval: float = 8.0
-@export var max_active_ai: int = 3
-@export var spawn_distance_min: float = 10.0
-@export var spawn_distance_max: float = 18.0
-@export var side_offset_max: float = 4.0
+@export var max_active_ai: int = 2
+@export var spawn_distance_min: float = 8.0
+@export var spawn_distance_max: float = 12.0
+@export var side_offset_max: float = 2.0
 
 # --- Internal ---
 var player: Node3D
@@ -64,7 +64,7 @@ func spawn_ai():
 	var spawn_position = player.global_position + direction * spawn_distance
 
 	# --- Add small horizontal randomness ---
-	spawn_position.x += randf_range(-side_offset_max, side_offset_max)
+	#spawn_position.x += randf_range(-side_offset_max, side_offset_max)
 	spawn_position.z += randf_range(-side_offset_max, side_offset_max)
 
 	# --- Raycast to find floor height ---
@@ -80,7 +80,7 @@ func spawn_ai():
 		spawn_position.y = player.global_position.y  # fallback
 
 	# --- Clamp to reasonable bounds (stay in hallway width) ---
-	spawn_position.x = clamp(spawn_position.x, -side_offset_max * 3, side_offset_max * 3)
+	#spawn_position.x = clamp(spawn_position.x, -side_offset_max * 3, side_offset_max * 3)
 	spawn_position.z = clamp(spawn_position.z, -100, 100)
 
 	# --- Place AI ---
