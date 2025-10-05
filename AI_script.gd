@@ -4,7 +4,7 @@ extends Node3D
 @export var ai_scene: PackedScene
 @export var player_path: NodePath  # assign Player node in Inspector
 @export var spawn_interval: float = 8.0
-@export var max_active_ai: int = 2
+@export var max_active_ai: int = 3
 @export var spawn_distance_min: float = 10.0
 @export var spawn_distance_max: float = 18.0
 @export var side_offset_max: float = 4.0

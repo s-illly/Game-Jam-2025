@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 # --- Parameters ---
-@export var move_speed: float = 2.0
+@export var move_speed: float = 2.5
 @export var chase_time: float = 5.0
 @export var despawn_look_time: float = 2.0
 @export var grace_period: float = 5.0

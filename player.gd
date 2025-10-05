@@ -77,6 +77,10 @@ func _exit_tree() -> void:
 		print("🧹 Hand tracker closed")
 
 func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("exit"):
+		print("⏹ Game exited by player")
+		get_tree().quit()
+	
 	hand_detected = false
 
 	# Accept new client
@@ -111,6 +115,8 @@ func set_target_look(nx: float, ny: float) -> void:
 	target_pitch = clamp(-ny * pitch_range, deg_to_rad(-40.0), deg_to_rad(40.0))
 	target_energy = 1.0
 
+
+			
 func _physics_process(delta: float) -> void:
 	# --- Forced backward glance ---
 	if is_forced_looking_back:
@@ -156,11 +162,13 @@ func _physics_process(delta: float) -> void:
 		current_yaw += turn_speed * delta
 	if Input.is_action_pressed("move_right"):
 		current_yaw -= turn_speed * delta
-
+	
 	direction = direction.normalized()
 	velocity.x = direction.x * walk_speed
 	velocity.z = direction.z * walk_speed
 	move_and_slide()
+	
+	
 
 	# --- Flashlight smoothing ---
 	current_energy = lerp(current_energy, target_energy, energy_smooth)
