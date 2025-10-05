@@ -35,9 +35,9 @@ try:
             sock.sendall(msg.encode() + b'\n')
             cv2.circle(img, (x, y), 10, (0, 255, 0), cv2.FILLED)
 
-        cv2.imshow("Img", img)
-        if cv2.waitKey(1) & 0xFF == 27:
-            break
+        # cv2.imshow("Img", img)
+        # if cv2.waitKey(1) & 0xFF == 27:
+        #    break
 
 except KeyboardInterrupt:
     pass
