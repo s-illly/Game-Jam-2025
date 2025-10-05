@@ -22,6 +22,7 @@ extends Node3D
 @export var prevent_overlap: bool = true  # stop a sound if another should fire
 
 func _ready():
+  DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	#backgroundMusic.play()
 	randomize()
 	_start_random_noise()

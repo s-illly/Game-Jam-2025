@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://i1ihg4sum7hl"]
 
 [ext_resource type="PackedScene" uid="uid://drrtfvy8pxc4o" path="res://textures/hallway/hallway.glb" id="1_45xto"]
-[ext_resource type="Script" uid="uid://sak7buu5tp1f" path="res://omni_light_3d.gd" id="2_88hf1"]
+[ext_resource type="Script" path="res://omni_light_3d.gd" id="2_88hf1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_45xto"]
 size = Vector3(11.04126, 7.9262085, 1)
@@ -13,6 +13,10 @@ size = Vector3(9.402344, 1, 6.364624)
 size = Vector3(477.56015, 108.45581, 1)
 
 [node name="hallway" instance=ExtResource("1_45xto")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+
+[node name="Root Node" parent="." index="0"]
+transform = Transform3D(-1.1102692e-09, -0.025400003, -1.1102694e-09, 0, -1.1102694e-09, 0.025400003, -0.0254, 1.1102694e-09, 4.8531418e-17, 0, 0, 0)
 
 [node name="Mesh_0" parent="Root Node/skp6BB7" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, -2.842171e-14, 0, 2.842171e-14, 1, 0, 7.6293945e-06, 3.637979e-12)
@@ -39,5 +43,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 286.20355, -6.0882797, 1.7037
 shape = SubResource("BoxShape3D_wdq1x")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3939903, 3.974134, -3.756475)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.693857, 3.744035, 3.4770994)
+light_color = Color(0.83137256, 0.8980392, 0.7294118, 1)
+light_energy = 0.67
+omni_range = 0.7517668
+omni_shadow_mode = 0
 script = ExtResource("2_88hf1")
