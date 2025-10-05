@@ -1,6 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://qrr45kwsdqoc"]
+[gd_scene load_steps=6 format=3 uid="uid://0rcir7f06lnt"]
 
 [ext_resource type="Script" uid="uid://dp74j5nyjyv82" path="res://menu.gd" id="1_lti8b"]
+[ext_resource type="Texture2D" uid="uid://cemeyadpxd8d4" path="res://textures/creepy hallway.png" id="2_4hy44"]
+[ext_resource type="FontFile" uid="uid://d0maugsx2afih" path="res://fonts/Inria_Serif/InriaSerif-Italic.ttf" id="2_mae5d"]
+[ext_resource type="FontFile" uid="uid://dqvclhqtlh2sb" path="res://fonts/Saira_Semi_Condensed/SairaSemiCondensed-Medium.ttf" id="3_4hy44"]
+[ext_resource type="FontFile" uid="uid://dqqcoh4yk7v20" path="res://fonts/Saira_Semi_Condensed/SairaSemiCondensed-Light.ttf" id="5_ytr4m"]
 
 [sub_resource type="Theme" id="Theme_lti8b"]
 
@@ -24,23 +28,29 @@ offset_right = 1924.0
 offset_bottom = 1076.0
 color = Color(0.08073846, 0.08780633, 0.0453991, 1)
 
-[node name="Label" type="Label" parent="Rules"]
-layout_mode = 0
-offset_left = 912.0
-offset_top = 328.0
-offset_right = 1174.0
-offset_bottom = 373.0
-theme_override_font_sizes/font_size = 32
-text = "menu"
-
 [node name="Button" type="Button" parent="Rules"]
 layout_mode = 0
-offset_left = 747.0
-offset_top = 600.0
-offset_right = 1118.0
-offset_bottom = 686.0
-text = "start"
+offset_left = 804.0
+offset_top = 712.0
+offset_right = 1175.0
+offset_bottom = 798.0
+theme_override_fonts/font = ExtResource("3_4hy44")
+theme_override_font_sizes/font_size = 48
+text = "BEGIN"
 flat = true
+
+[node name="RulesDescription" type="Label" parent="Rules"]
+layout_mode = 0
+offset_left = 548.0
+offset_top = 317.0
+offset_right = 1412.0
+offset_bottom = 557.0
+theme_override_fonts/font = ExtResource("2_mae5d")
+theme_override_font_sizes/font_size = 64
+text = "You are trapped in a hallway.
+Make it to the end.
+Don't look back..."
+horizontal_alignment = 1
 
 [node name="Title" type="Control" parent="."]
 anchors_preset = 0
@@ -53,24 +63,64 @@ offset_right = 1924.0
 offset_bottom = 1076.0
 color = Color(0.08073846, 0.08780633, 0.0453991, 1)
 
-[node name="Label" type="Label" parent="Title"]
+[node name="ImageBackground" type="TextureRect" parent="Title"]
 layout_mode = 0
-offset_left = 912.0
-offset_top = 328.0
-offset_right = 1174.0
-offset_bottom = 373.0
-theme_override_font_sizes/font_size = 32
-text = "game"
+offset_right = 1922.0
+offset_bottom = 1072.0
+texture = ExtResource("2_4hy44")
+
+[node name="Credits2" type="Label" parent="Title"]
+layout_mode = 0
+offset_left = 1396.0
+offset_top = 959.0
+offset_right = 1848.0
+offset_bottom = 1016.0
+theme_override_fonts/font = ExtResource("5_ytr4m")
+theme_override_font_sizes/font_size = 36
+text = "UW Game Jam 2025"
+horizontal_alignment = 2
+
+[node name="Credits" type="Label" parent="Title"]
+layout_mode = 0
+offset_left = 74.0
+offset_top = 963.0
+offset_right = 526.0
+offset_bottom = 1020.0
+theme_override_fonts/font = ExtResource("5_ytr4m")
+theme_override_font_sizes/font_size = 36
+text = "Created by Lily & Winston"
+
+[node name="TitleText" type="Label" parent="Title"]
+layout_mode = 0
+offset_left = 584.0
+offset_top = 399.0
+offset_right = 1365.0
+offset_bottom = 477.0
+theme_override_fonts/font = ExtResource("2_mae5d")
+theme_override_font_sizes/font_size = 64
+text = "It's just a burning memory"
+horizontal_alignment = 1
 
 [node name="Button" type="Button" parent="Title"]
 layout_mode = 0
-offset_left = 747.0
-offset_top = 600.0
-offset_right = 1118.0
-offset_bottom = 686.0
-theme = SubResource("Theme_lti8b")
-text = "play"
-flat = true
+offset_left = 452.0
+offset_top = 611.0
+offset_right = 823.0
+offset_bottom = 771.0
+theme_override_fonts/font = ExtResource("3_4hy44")
+theme_override_font_sizes/font_size = 96
+text = "PLAY"
+
+[node name="ExitButton" type="Button" parent="Title"]
+layout_mode = 0
+offset_left = 1104.0
+offset_top = 610.0
+offset_right = 1475.0
+offset_bottom = 770.0
+theme_override_fonts/font = ExtResource("3_4hy44")
+theme_override_font_sizes/font_size = 96
+text = "EXIT"
 
 [connection signal="pressed" from="Rules/Button" to="." method="rules_button_pressed"]
 [connection signal="pressed" from="Title/Button" to="." method="title_button_pressed"]
+[connection signal="pressed" from="Title/ExitButton" to="." method="exit_button_pressed"]

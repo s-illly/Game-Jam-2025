@@ -12,3 +12,6 @@ func rules_button_pressed() -> void:
 func title_button_pressed() -> void:
 	$Rules.visible = true
 	$Title.visible = false
+
+func exit_button_pressed() -> void:
+	get_tree().quit()
