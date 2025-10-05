@@ -108,10 +108,11 @@ func _physics_process(delta: float) -> void:
 
 	# Keyboard movement
 	var direction = Vector3.ZERO
-	if Input.is_action_pressed("move_forward"):
-		direction += transform.basis.z
+	# Move backward takes priority — disables forward motion
 	if Input.is_action_pressed("move_backward"):
-		rotation.y += PI
+		rotation.y += PI  # or whatever your backward logic is
+	elif Input.is_action_pressed("move_forward"):
+		direction += transform.basis.z
 	if Input.is_action_pressed("move_left"):
 		current_yaw += turn_speed * delta
 	if Input.is_action_pressed("move_right"):
