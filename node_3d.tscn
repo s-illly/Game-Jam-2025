@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://c5ev5ithmxmf3"]
+[gd_scene load_steps=10 format=3 uid="uid://c5ev5ithmxmf3"]
 
 [ext_resource type="PackedScene" uid="uid://b8wg6ln207opt" path="res://Player.tscn" id="1_a202f"]
 [ext_resource type="Script" uid="uid://d1bb17y6yixyf" path="res://game.gd" id="1_r3fl7"]
 [ext_resource type="PackedScene" uid="uid://i1ihg4sum7hl" path="res://hallway_component.tscn" id="2_a0tk4"]
 [ext_resource type="Script" uid="uid://ct2h6dpm1kety" path="res://hallway_component.gd" id="4_jka67"]
 [ext_resource type="AudioStream" uid="uid://qb3pp82856qb" path="res://audio/ES_Scream, Lo-FI, Vintage - Epidemic Sound.mp3" id="4_r3fl7"]
+[ext_resource type="AudioStream" uid="uid://ocr7rlbw6r7c" path="res://audio/Q1 - Stage 6 Long decline is over.mp3" id="6_i5arm"]
 
 [sub_resource type="Sky" id="Sky_a202f"]
 
@@ -46,5 +47,9 @@ shape = SubResource("BoxShape3D_noarx")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="hallway/SoundZone"]
 stream = ExtResource("4_r3fl7")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_i5arm")
+max_db = -10.248
 
 [connection signal="body_entered" from="hallway/SoundZone" to="." method="_on_sound_zone_body_entered"]

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ocr7rlbw6r7c"
+path="res://.godot/imported/Q1 - Stage 6 Long decline is over.mp3-1f63a31c2b238bbe855d0791623ca9c1.mp3str"
+
+[deps]
+
+source_file="res://audio/Q1 - Stage 6 Long decline is over.mp3"
+dest_files=["res://.godot/imported/Q1 - Stage 6 Long decline is over.mp3-1f63a31c2b238bbe855d0791623ca9c1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

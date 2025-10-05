@@ -1,8 +1,10 @@
 extends Node3D
 @onready var sound = $hallway/SoundZone/AudioStreamPlayer3D
+@onready var backgroundMusic = $AudioStreamPlayer3D
 
 
 func _ready():
+	backgroundMusic.play()
 	await get_tree().create_timer(10.0).timeout
 	sound.play()
 
