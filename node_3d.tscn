@@ -3,9 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://b8wg6ln207opt" path="res://Player.tscn" id="1_a202f"]
 [ext_resource type="Script" uid="uid://d1bb17y6yixyf" path="res://game.gd" id="1_r3fl7"]
 [ext_resource type="PackedScene" uid="uid://i1ihg4sum7hl" path="res://hallway_component.tscn" id="2_a0tk4"]
-[ext_resource type="Script" uid="uid://ct2h6dpm1kety" path="res://hallway_component.gd" id="4_jka67"]
 [ext_resource type="AudioStream" uid="uid://qb3pp82856qb" path="res://audio/ES_Scream, Lo-FI, Vintage - Epidemic Sound.mp3" id="4_r3fl7"]
 [ext_resource type="AudioStream" uid="uid://ocr7rlbw6r7c" path="res://audio/Q1 - Stage 6 Long decline is over.mp3" id="6_i5arm"]
+[ext_resource type="Script" uid="uid://dygt68blh65h2" path="res://hallway_script.gd" id="7_wc5p8"]
 
 [sub_resource type="Sky" id="Sky_a202f"]
 
@@ -32,24 +32,24 @@ environment = SubResource("Environment_4xowi")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.041894, 0)
 
 [node name="Player" parent="." instance=ExtResource("1_a202f")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.57066, 1.2460213, -6.910482)
-
-[node name="hallway" parent="." instance=ExtResource("2_a0tk4")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10, 0, -12)
-script = ExtResource("4_jka67")
-hallway = ExtResource("2_a0tk4")
-
-[node name="SoundZone" type="Area3D" parent="hallway"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="hallway/SoundZone"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8218937, 1.3312378, -3.224121)
-shape = SubResource("BoxShape3D_noarx")
-
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="hallway/SoundZone"]
-stream = ExtResource("4_r3fl7")
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.212, 1.5, 5.489)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("6_i5arm")
 max_db = -10.248
 
-[connection signal="body_entered" from="hallway/SoundZone" to="." method="_on_sound_zone_body_entered"]
+[node name="Hallway_script" type="Node3D" parent="."]
+script = ExtResource("7_wc5p8")
+hallway = ExtResource("2_a0tk4")
+
+[node name="SoundZone" type="Area3D" parent="Hallway_script"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hallway_script/SoundZone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8218937, 1.3312378, -3.224121)
+shape = SubResource("BoxShape3D_noarx")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Hallway_script/SoundZone"]
+stream = ExtResource("4_r3fl7")
+
+[connection signal="body_entered" from="Hallway_script/SoundZone" to="." method="_on_sound_zone_body_entered"]

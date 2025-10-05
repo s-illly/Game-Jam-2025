@@ -9,7 +9,7 @@ var client: StreamPeerTCP = null
 @onready var flashlight: SpotLight3D = $Camera3D/Node3D/SpotLight3D
 
 # --- Movement ---
-@export var walk_speed: float = 4.0
+@export var walk_speed: float = 2.0
 @export var turn_speed: float = 2.5
 
 # --- Hand-controlled look ---
@@ -53,9 +53,8 @@ func _exit_tree():
 	if python_process_id != -1:
 		OS.kill(python_process_id)
 		print("🧹 Hand tracker closed")
-		
-		
-		
+
+
 func _process(delta):
 	hand_detected = false
 

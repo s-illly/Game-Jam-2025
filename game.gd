@@ -1,7 +1,6 @@
 extends Node3D
-@onready var sound = $hallway/SoundZone/AudioStreamPlayer3D
+@onready var sound = $Hallway_script/SoundZone/AudioStreamPlayer3D
 @onready var backgroundMusic = $AudioStreamPlayer3D
-
 
 func _ready():
 	backgroundMusic.play()
