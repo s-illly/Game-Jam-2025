@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://qrr45kwsdqoc"]
+[gd_scene load_steps=3 format=3 uid="uid://qrr45kwsdqoc"]
 
 [ext_resource type="Script" uid="uid://dp74j5nyjyv82" path="res://menu.gd" id="1_lti8b"]
+
+[sub_resource type="Theme" id="Theme_lti8b"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -66,6 +68,7 @@ offset_left = 747.0
 offset_top = 600.0
 offset_right = 1118.0
 offset_bottom = 686.0
+theme = SubResource("Theme_lti8b")
 text = "play"
 flat = true
 
