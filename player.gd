@@ -120,11 +120,7 @@ func _physics_process(delta: float) -> void:
 
 	# --- Tank-style movement ---
 	var direction := Vector3.ZERO
-
-	if Input.is_action_pressed("move_forward"):
-		direction += transform.basis.z   # move in local forward direction
-	if Input.is_action_pressed("move_backward"):
-		rotation.y += PI                 # instantly turn around, no backward motion
+	
 	# Smooth flashlight energy
 	current_energy = lerp(current_energy, target_energy, energy_smooth)
 	if flashlight:
@@ -150,11 +146,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		ai_spawn_timer = 0.0
 		ai_spawned = false
-	# Keyboard movement
-	var direction = Vector3.ZERO
 	# Move backward takes priority — disables forward motion
 	if Input.is_action_pressed("move_backward"):
-		rotation.y += PI  # or whatever your backward logic is
+		rotation.y += PI  
 	elif Input.is_action_pressed("move_forward"):
 		direction += transform.basis.z
 	if Input.is_action_pressed("move_left"):
