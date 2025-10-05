@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://co8solh5s2bl6"
+path="res://.godot/imported/ES_Horror 04 - Epidemic Sound.mp3-3f3ed370600ad913034071fd19e6ea35.mp3str"
+
+[deps]
+
+source_file="res://audio/ES_Horror 04 - Epidemic Sound.mp3"
+dest_files=["res://.godot/imported/ES_Horror 04 - Epidemic Sound.mp3-3f3ed370600ad913034071fd19e6ea35.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
